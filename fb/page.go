@@ -114,3 +114,20 @@ func (p *Page) extractMessages(url string) ([]Message, string, error) {
 
 	return mr.Data, mr.Paging.Next, nil
 }
+
+func (p *Page) GetParticipants(c *Conversation) ([]User, error) {
+	url := fmt.Sprintf("%s/%s?fields=participants&access_token=%s", GraphAPIEndpoint, c.ID, p.Token)
+	resp, err := httpget(url)
+	if err != nil {
+		log.Println("Getting participants failed:", err.Error())
+		return nil, err
+	}
+
+	var pr ParticipantsResult
+	err = json.Unmarshal(resp, &pr)
+	if err != nil {
+		log.Println("Unmarshalling participants result failed:", err.Error())
+		return nil, err
+	}
+	return pr.Participants["data"], nil
+}

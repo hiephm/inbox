@@ -13,6 +13,10 @@ type Conversation struct {
 	Messages []Message
 }
 
+type ParticipantsResult struct {
+	Participants map[string][]User `json:"participants"`
+}
+
 func (c *Conversation) String() string {
 	var conversation string 
 	for k := len(c.Messages)-1; k >= 0; k-- {
